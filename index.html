@@ -3,23 +3,918 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>AI Training Hub - Large Language Models & Transformers</title>
     <style>
+        :root {
+            --primary-color: #d97757;
+            --primary-hover: #c4664a;
+            --background-dark: #1a1a1a;
+            --background-card: #252525;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8b8;
+            --text-muted: #888888;
+            --border-color: #3a3a3a;
+            --accent-orange: #e8927c;
+            --accent-blue: #6ba3d9;
+            --success-green: #5cb85c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .section {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--background-dark) 0%, var(--background-card) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background-color: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(217, 119, 87, 0.1);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin: 4rem 0;
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.8rem;
+            color: var(--accent-orange);
+            margin: 2rem 0 1rem;
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .content-section ul {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .content-section li {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        /* Diagram Styles */
+        .diagram-container {
+            background-color: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .diagram {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-        h1 {
-            color: #333;
+
+        .diagram-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .diagram-arrow {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background-color: #0d0d0d;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-block code {
+            color: var(--text-primary);
+        }
+
+        .keyword { color: var(--primary-color); }
+        .string { color: var(--accent-orange); }
+        .comment { color: var(--text-muted); }
+        .function { color: var(--accent-blue); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .timeline-marker::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: calc(100% + 2rem);
+            background-color: var(--border-color);
+        }
+
+        .timeline-item:last-child .timeline-marker::after {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background-color: var(--background-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-content h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Prompt Examples */
+        .prompt-example {
+            background-color: var(--background-card);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .prompt-label {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .prompt-text {
+            color: var(--text-secondary);
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--background-card);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .timeline-marker::after {
+                left: 10px;
+            }
+        }
+
+        /* Tab Navigation within Sections */
+        .tab-container {
+            margin: 2rem 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
     </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showSection('home'); return false;">AI Training Hub</a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('home'); return false;" id="nav-home" class="active">Home</a></li>
+                <li><a href="#" onclick="showSection('architecture'); return false;" id="nav-architecture">Architecture</a></li>
+                <li><a href="#" onclick="showSection('training'); return false;" id="nav-training">Training Stages</a></li>
+                <li><a href="#" onclick="showSection('prompting'); return false;" id="nav-prompting">Prompting</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Understanding Large Language Models</h1>
+                <p>A comprehensive guide to transformer architecture, training methodologies, and advanced prompting techniques for modern AI systems.</p>
+                <button class="cta-button" onclick="showSection('architecture')">Start Learning</button>
+            </div>
+
+            <div class="content-section">
+                <h2>What You'll Learn</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🏗️ Transformer Architecture</h3>
+                        <p>Dive deep into the revolutionary architecture that powers modern LLMs, from attention mechanisms to positional encoding.</p>
+                    </div>
+                    <div class="card">
+                        <h3>📚 Training Pipeline</h3>
+                        <p>Understand the multi-stage training process from pre-training through fine-tuning and alignment.</p>
+                    </div>
+                    <div class="card">
+                        <h3>💡 Advanced Prompting</h3>
+                        <p>Master sophisticated prompting techniques to unlock the full potential of language models.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture" class="section">
+            <div class="content-section">
+                <h2>Transformer Architecture</h2>
+                <p>The transformer model, introduced in the landmark paper "Attention Is All You Need" (2017), revolutionized natural language processing by replacing recurrent and convolutional layers with self-attention mechanisms.</p>
+
+                <h3>Core Components</h3>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Self-Attention Mechanism</h3>
+                        <p>The heart of the transformer. Allows each position to attend to all positions in the previous layer, computing weighted representations based on relevance.</p>
+                        <p><strong>Formula:</strong> Attention(Q, K, V) = softmax(QKᵀ/√dₖ)V</p>
+                        <ul>
+                            <li><strong>Query (Q):</strong> What am I looking for?</li>
+                            <li><strong>Key (K):</strong> What do I contain?</li>
+                            <li><strong>Value (V):</strong> What information do I offer?</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Multi-Head Attention</h3>
+                        <p>Multiple attention heads allow the model to jointly attend to information from different representation subspaces at different positions.</p>
+                        <ul>
+                            <li>Parallel attention computations</li>
+                            <li>Captures different types of relationships</li>
+                            <li>Typically 8-96 heads in modern models</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Positional Encoding</h3>
+                        <p>Since transformers have no inherent notion of sequence order, positional encodings are added to inject information about token positions.</p>
+                        <ul>
+                            <li>Sinusoidal or learned embeddings</li>
+                            <li>Maintains relative position information</li>
+                            <li>Essential for understanding sequence structure</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Feed-Forward Networks</h3>
+                        <p>Position-wise fully connected feed-forward networks apply nonlinear transformations to each position independently.</p>
+                        <ul>
+                            <li>Two linear transformations with ReLU/GELU activation</li>
+                            <li>Typically 4x expansion of hidden dimension</li>
+                            <li>Processes each token independently</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Layer Normalization</h3>
+                        <p>Normalization layers stabilize training and improve convergence. Applied before (pre-norm) or after (post-norm) attention and FFN blocks.</p>
+                        <ul>
+                            <li>Reduces internal covariate shift</li>
+                            <li>Enables deeper architectures</li>
+                            <li>Pre-norm generally preferred in modern LLMs</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Residual Connections</h3>
+                        <p>Skip connections around each sub-layer enable gradient flow through deep networks and help preserve information.</p>
+                        <ul>
+                            <li>Add & Norm structure</li>
+                            <li>Prevents vanishing gradients</li>
+                            <li>Critical for training deep models</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Architecture Flow Diagram</h3>
+                <div class="diagram-container">
+                    <div class="diagram">
+                        <div class="diagram-box">Input Embeddings</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-box">+ Positional Encoding</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-box">Transformer Blocks (×N)</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-box">Output Layer</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-box">Softmax</div>
+                    </div>
+                </div>
+
+                <h3>Modern Variations</h3>
+                <p>Contemporary LLMs have evolved the original transformer architecture:</p>
+                <ul>
+                    <li><strong>Decoder-only models:</strong> GPT series use causal masking for autoregressive generation</li>
+                    <li><strong>RoPE (Rotary Positional Embeddings):</strong> Better extrapolation to longer sequences</li>
+                    <li><strong>RMSNorm:</strong> More efficient normalization without mean centering</li>
+                    <li><strong>SwiGLU activations:</strong> Improved non-linearity for better performance</li>
+                    <li><strong>Grouped Query Attention:</strong> Reduces memory bandwidth requirements</li>
+                    <li><strong>Mixture of Experts (MoE):</strong> Sparse activation for efficiency at scale</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Training Stages Section -->
+        <section id="training" class="section">
+            <div class="content-section">
+                <h2>LLM Training Stages</h2>
+                <p>Training large language models is a complex, multi-stage process that requires careful planning, massive computational resources, and iterative refinement.</p>
+
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="showTab('stage1', this)">Stage 1: Pre-training</button>
+                        <button class="tab-button" onclick="showTab('stage2', this)">Stage 2: SFT</button>
+                        <button class="tab-button" onclick="showTab('stage3', this)">Stage 3: RLHF</button>
+                        <button class="tab-button" onclick="showTab('stage4', this)">Stage 4: Alignment</button>
+                    </div>
+
+                    <div id="stage1" class="tab-content active">
+                        <h3>Stage 1: Pre-training</h3>
+                        <p>The foundation of any LLM. The model learns general language patterns, world knowledge, and reasoning capabilities from vast amounts of unlabeled text data.</p>
+                        
+                        <div class="card-grid">
+                            <div class="card">
+                                <h4>📊 Data Collection</h4>
+                                <p>Curating diverse, high-quality datasets from web crawls, books, code repositories, scientific papers, and more. Data quality directly impacts model performance.</p>
+                            </div>
+                            <div class="card">
+                                <h4>🔧 Tokenization</h4>
+                                <p>Converting text into numerical tokens using methods like BPE (Byte Pair Encoding) or SentencePiece. Typical vocabularies range from 32K to 100K+ tokens.</p>
+                            </div>
+                            <div class="card">
+                                <h4>⚙️ Training Objective</h4>
+                                <p>Causal language modeling: predict the next token given all previous tokens. This autoregressive objective teaches the model language structure and coherence.</p>
+                            </div>
+                            <div class="card">
+                                <h4>🖥️ Infrastructure</h4>
+                                <p>Requires thousands of GPUs/TPUs running for weeks or months. Uses techniques like gradient checkpointing, mixed precision, and pipeline parallelism.</p>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+                            <pre><code><span class="comment"># Simplified pre-training loop</span>
+<span class="keyword">for</span> batch <span class="keyword">in</span> dataloader:
+    tokens = batch[<span class="string">:seq_len</span>]
+    labels = batch[<span class="string">1:seq_len+1</span>]
+    
+    <span class="comment"># Forward pass</span>
+    logits = model(tokens)
+    
+    <span class="comment"># Compute cross-entropy loss</span>
+    loss = cross_entropy(logits, labels)
+    
+    <span class="comment"># Backward pass & optimization</span>
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()</code></pre>
+                        </div>
+
+                        <p><strong>Key Metrics:</strong> Training loss curves, perplexity, evaluation on benchmark datasets (MMLU, GSM8K, HumanEval, etc.)</p>
+                    </div>
+
+                    <div id="stage2" class="tab-content">
+                        <h3>Stage 2: Supervised Fine-Tuning (SFT)</h3>
+                        <p>Also called instruction tuning. Adapts the pre-trained model to follow instructions and engage in helpful dialogue using curated prompt-response pairs.</p>
+
+                        <div class="card-grid">
+                            <div class="card">
+                                <h4>📝 Dataset Creation</h4>
+                                <p>High-quality human-written demonstrations covering diverse tasks: question answering, creative writing, coding, analysis, and more.</p>
+                            </div>
+                            <div class="card">
+                                <h4>🎯 Format Standardization</h4>
+                                <p>Consistent conversation formats with clear role markers (user/assistant) and system prompts that define behavior.</p>
+                            </div>
+                            <div class="card">
+                                <h4>📈 Training Approach</h4>
+                                <p>Full fine-tuning or parameter-efficient methods (LoRA, QLoRA) on 10K-1M+ examples. Lower learning rates than pre-training.</p>
+                            </div>
+                        </div>
+
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example SFT Training Pair:</span>
+                            <p class="prompt-text"><strong>User:</strong> Explain quantum entanglement in simple terms.<br><br>
+                            <strong>Assistant:</strong> Quantum entanglement is a phenomenon where two particles become connected in such a way that measuring one instantly affects the other, regardless of distance. Imagine having two magic coins... [continues with clear, accurate explanation]</p>
+                        </div>
+                    </div>
+
+                    <div id="stage3" class="tab-content">
+                        <h3>Stage 3: Reinforcement Learning from Human Feedback (RLHF)</h3>
+                        <p>Aligns the model with human preferences by learning from comparative judgments rather than explicit correct answers.</p>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Step 1: Preference Data Collection</h4>
+                                    <p>Human annotators compare multiple model responses to the same prompt, ranking them by quality, helpfulness, and safety.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Step 2: Reward Model Training</h4>
+                                    <p>Train a separate model to predict human preferences. This reward model scores responses, enabling automated optimization.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Step 3: PPO Optimization</h4>
+                                    <p>Use Proximal Policy Optimization to update the policy (LLM) to maximize reward while staying close to the SFT model (KL penalty).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+                            <pre><code><span class="comment"># RLHF objective function</span>
+<span class="function">loss</span> = -<span class="function">log_prob</span>(chosen_response) * advantage 
+       + beta * <span class="function">kl_divergence</span>(policy, reference_model)
+       
+<span class="comment"># Maximize reward while penalizing deviation from SFT</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div id="stage4" class="tab-content">
+                        <h3>Stage 4: Advanced Alignment & Safety</h3>
+                        <p>Additional refinement to ensure the model is helpful, harmless, and honest across diverse scenarios.</p>
+
+                        <ul>
+                            <li><strong>Constitutional AI:</strong> Self-critique based on written principles without human feedback at every step</li>
+                            <li><strong>Red Teaming:</strong> Adversarial testing to identify and fix failure modes</li>
+                            <li><strong>Domain-specific Fine-tuning:</strong> Specialization for medical, legal, or technical applications</li>
+                            <li><strong>Continuous Evaluation:</strong> Ongoing monitoring for drift, bias, and emerging risks</li>
+                            <li><strong>Refusal Training:</strong> Teaching appropriate boundaries for harmful requests</li>
+                        </ul>
+
+                        <div class="card" style="margin-top: 2rem;">
+                            <h4>🔄 Iterative Process</h4>
+                            <p>Alignment is not a one-time event. Production models undergo continuous evaluation, feedback collection, and incremental updates to maintain quality and safety standards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prompting Section -->
+        <section id="prompting" class="section">
+            <div class="content-section">
+                <h2>Advanced Prompting Techniques</h2>
+                <p>Effective prompting unlocks the full capabilities of language models. These techniques help you get more accurate, reliable, and useful outputs.</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Zero-Shot Prompting</h3>
+                        <p>Directly asking the model to perform a task without examples.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">Classify the sentiment of this review: "The movie was fantastic!"</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Few-Shot Prompting</h3>
+                        <p>Providing examples to demonstrate the desired format and reasoning pattern.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">Q: What is 2+2? A: 4<br>Q: What is 3+3? A: 6<br>Q: What is 4+4? A: ?</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Chain of Thought (CoT)</h3>
+                        <p>Encouraging step-by-step reasoning before providing the final answer.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">Let's think step by step. First, identify the key variables. Next, determine the relevant formula...</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Role Prompting</h3>
+                        <p>Assigning a specific persona or expertise to the model.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">You are an expert physicist with 20 years of teaching experience. Explain black holes to a high school student.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Tree of Thoughts</h3>
+                        <p>Exploring multiple reasoning paths and selecting the best one.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">Generate three different approaches to solve this problem. Evaluate each approach. Select and elaborate on the best one.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Self-Consistency</h3>
+                        <p>Sampling multiple outputs and selecting the most consistent answer.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Strategy:</span>
+                            <p class="prompt-text">Generate 5 independent solutions. Use majority voting or confidence scoring to select the final answer.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Retrieval-Augmented Generation (RAG)</h3>
+                        <p>Combining model knowledge with external retrieved information.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Pattern:</span>
+                            <p class="prompt-text">[Retrieved context from database]<br><br>Based on the above information, answer: [user query]</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Constitutional Prompting</h3>
+                        <p>Embedding principles and constraints directly in the prompt.</p>
+                        <div class="prompt-example">
+                            <span class="prompt-label">Example:</span>
+                            <p class="prompt-text">Always be truthful. If you're uncertain, say so. Never provide harmful instructions. Cite sources when possible.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Best Practices for Effective Prompting</h3>
+                <div class="card" style="margin-top: 2rem;">
+                    <ul>
+                        <li><strong>Be Specific:</strong> Clearly state what you want, including format, length, and style requirements</li>
+                        <li><strong>Provide Context:</strong> Include relevant background information to ground the response</li>
+                        <li><strong>Use Delimiters:</strong> Separate instructions, context, and input with clear markers (###, """, etc.)</li>
+                        <li><strong>Iterate:</strong> Refine prompts based on outputs; small changes can have big impacts</li>
+                        <li><strong>Set Constraints:</strong> Specify what NOT to do as clearly as what TO do</li>
+                        <li><strong>Request Structure:</strong> Ask for tables, bullet points, or JSON when appropriate</li>
+                        <li><strong>Temperature Tuning:</strong> Lower temps (0.2-0.5) for factual tasks, higher (0.7-1.0) for creativity</li>
+                    </ul>
+                </div>
+
+                <h3>Common Pitfalls to Avoid</h3>
+                <div class="card-grid" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h4>❌ Vague Instructions</h4>
+                        <p>"Write something about AI" vs. "Write a 300-word beginner-friendly explanation of neural networks with one real-world example"</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Contradictory Requirements</h4>
+                        <p>Asking for brevity while requesting comprehensive coverage creates confusion</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Assuming Knowledge</h4>
+                        <p>The model doesn't know your specific context unless you provide it</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Over-complicating</h4>
+                        <p>Break complex tasks into multiple prompts rather than one overwhelming request</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>AI Training Hub | Educational Resource on Large Language Models</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Inspired by Anthropic's design philosophy • Built for GitHub Pages</p>
+    </footer>
+
+    <script>
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to corresponding nav link
+            const navLink = document.getElementById('nav-' + sectionId);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Tab navigation within sections
+        function showTab(tabId, button) {
+            // Get parent tab container
+            const container = button.closest('.tab-container');
+            
+            // Hide all tab contents in this container
+            container.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons in this container
+            container.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show target tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add subtle animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards and content sections
+        document.querySelectorAll('.card, .content-section > p, .content-section > h3').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
